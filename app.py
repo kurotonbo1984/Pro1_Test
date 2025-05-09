@@ -60,29 +60,29 @@ if not st.session_state.answered:
     if st.session_state.selected:
         st.markdown(f"選択中: 『{st.session_state.selected}』")
 
-    st.markdown("""
-    <div style="text-align: center; margin-top: 20px;">
-        <form action="" method="post">
-            <button style="font-size: 28px; padding: 10px 30px; background-color: #4CAF50; color: white; border: none; border-radius: 10px;" name="submit" type="submit">
-                ✅ 回答する
-            </button>
-        </form>
-""", unsafe_allow_html=True)
+#     st.markdown("""
+#     <div style="text-align: center; margin-top: 20px;">
+#         <form action="" method="post">
+#             <button style="font-size: 28px; padding: 10px 30px; background-color: #4CAF50; color: white; border: none; border-radius: 10px;" name="submit" type="submit">
+#                 ✅ 回答する
+#             </button>
+#         </form>
+# """, unsafe_allow_html=True)
 
-if st.session_state.selected and st.session_state.get("submit_answer") is None and st.form_submit_button("回答する"):
-    st.session_state.answered = True
-    st.session_state.total += 1
-    if st.session_state.selected == quiz["answer"]:
-        st.session_state.correct += 1
-    st.rerun()
+# if st.session_state.selected and st.session_state.get("submit_answer") is None and st.form_submit_button("回答する"):
+#     st.session_state.answered = True
+#     st.session_state.total += 1
+#     if st.session_state.selected == quiz["answer"]:
+#         st.session_state.correct += 1
+#     st.rerun()
 
     
-    # if st.button("✅ 回答する", key="submit_answer"):
-    #     st.session_state.answered = True
-    #     st.session_state.total += 1
-    #     if st.session_state.selected == quiz["answer"]:
-    #         st.session_state.correct += 1
-    #     st.rerun()
+    if st.button("✅ 回答する", key="submit_answer"):
+        st.session_state.answered = True
+        st.session_state.total += 1
+        if st.session_state.selected == quiz["answer"]:
+            st.session_state.correct += 1
+        st.rerun()
 
 # 回答後の処理
 else:
