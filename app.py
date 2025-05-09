@@ -23,7 +23,7 @@ quiz = df.sample(1).iloc[0]
 # 問題表示
 st.subheader(quiz["question"])
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
     st.image(quiz["image_full"], caption="全体地図", width=450)
@@ -39,12 +39,15 @@ random.shuffle(choices)
 selected = st.radio("選んでください:", choices, index=None)
 
 if selected:
-    if selected == quiz["answer"]:
-        st.markdown(f"### ✅ 正解です！「{selected}」")
-        st.balloons()
-    else:
-        st.markdown(f"### ❌ 不正解です… 正解は「{quiz['answer']}」")
-        st.snow()
+    # フィードバック表示エリア
+    col_left, col_right = st.columns([1, 2])
+    with col_right:
+        if selected == quiz["answer"]:
+            st.success(f"✅ 正解です！『{selected}』")
+            st.balloons()
+        else:
+            st.error(f"❌ 不正解です… 正解は『{quiz['answer']}』")
+            st.snow()
 
     st.markdown("---")
     if st.button("▶ 別の問題へ"):
