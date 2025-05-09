@@ -55,7 +55,7 @@ if not st.session_state.answered:
     for i, choice in enumerate(choices):
         if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}_{st.session_state.total}"):
             st.session_state.selected = choice
-            st.experimental_rerun()
+            st.rerun()
 
     if st.session_state.selected:
         st.markdown(f"選択中: 『{st.session_state.selected}』")
