@@ -17,8 +17,15 @@ def load_data():
 
 df = load_data()
 
-# ランダムに一問出題
-quiz = df.sample(1).iloc[0]
+# セッションステートの初期化
+if "answered" not in st.session_state:
+    st.session_state.answered = False
+if "selected" not in st.session_state:
+    st.session_state.selected = None
+if "quiz" not in st.session_state:
+    st.session_state.quiz = df.sample(1).iloc[0]
+
+quiz = st.session_state.quiz
 
 # 問題表示
 st.subheader(quiz["question"])
@@ -36,10 +43,14 @@ st.markdown("### 選択肢")
 choices = quiz["choices"].split(",")
 random.shuffle(choices)
 
-selected = st.radio("選んでください:", choices, index=None)
-
-if selected:
-    # フィードバック表示エリア
+if not st.session_state.answered:
+    selected = st.radio("選んでください:", choices, index=None, key="selection")
+    if selected:
+        st.session_state.selected = selected
+        st.session_state.answered = True
+        st.experimental_rerun()
+else:
+    selected = st.session_state.selected
     col_left, col_right = st.columns([1, 2])
     with col_right:
         if selected == quiz["answer"]:
@@ -51,4 +62,7 @@ if selected:
 
     st.markdown("---")
     if st.button("▶ 別の問題へ"):
+        st.session_state.quiz = df.sample(1).iloc[0]
+        st.session_state.answered = False
+        st.session_state.selected = None
         st.experimental_rerun()
