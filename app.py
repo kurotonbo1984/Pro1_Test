@@ -55,28 +55,26 @@ if not st.session_state.answered:
         if selected == quiz["answer"]:
             st.session_state.correct += 1
         st.rerun()
+        
+selected = st.session_state.selected
+correct = selected == quiz["answer"]
+
+# 地図を非表示にしてフィードバックのみ表示
+st.markdown("---")
+if correct:
+    st.markdown(f"<h1 style='text-align: center; color: green; font-size: 48px;'>✅ 正解！『{selected}』</h1>", unsafe_allow_html=True)
+    st.balloons()
 else:
-    selected = st.session_state.selected
-    correct = selected == quiz["answer"]
+    st.markdown(f"<h1 style='text-align: center; color: red; font-size: 48px;'>❌ 不正解… 『{selected}』</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; color: green; font-size: 36px;'>正解は『{quiz['answer']}』です</h2>", unsafe_allow_html=True)
+    st.snow()
 
-    # 地図を非表示にしてフィードバックのみ表示
-    st.markdown("---")
-    if correct:
-        st.markdown(f"<h1 style='text-align: center; color: green; font-size: 48px;'>✅ 正解！『{selected}』</h1>", unsafe_allow_html=True)
-        st.balloons()
-    else:
-        st.markdown(f"<h1 style='text-align: center; color: red; font-size: 48px;'>❌ 不正解… 『{selected}』</h1>", unsafe_allow_html=True)
-        st.markdown(f"<h2 style='text-align: center; color: green; font-size: 36px;'>正解は『{quiz['answer']}』です</h2>", unsafe_allow_html=True)
-        st.snow()
 
-    # スコア表示
-    st.markdown(f"<p style='text-align: center; font-size: 20px;'>正解数: {st.session_state.correct} / {st.session_state.total}</p>", unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-    if st.button("🟢 次の問題へ ▶", key="next_button", use_container_width=True):
-        st.session_state.quiz_index = random.randint(0, len(df) - 1)
-        st.session_state.answered = False
-        st.session_state.selected = None
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("---")
+st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+if st.button("🟢 次の問題へ ▶", key="next_button", use_container_width=True):
+    st.session_state.quiz_index = random.randint(0, len(df) - 1)
+    st.session_state.answered = False
+    st.session_state.selected = None
+    st.rerun()
+st.markdown("</div>", unsafe_allow_html=True)
