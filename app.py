@@ -51,13 +51,16 @@ if not st.session_state.answered:
     cols = st.columns(2)
     for i, choice in enumerate(choices):
         if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
-            if not st.session_state.answered:
-                st.session_state.selected = choice
-                st.session_state.answered = True
-                st.session_state.total += 1
-                if choice == quiz["answer"]:
-                    st.session_state.correct += 1
-                st.rerun()
+            st.session_state.selected = choice
+
+    if st.session_state.selected:
+        st.markdown(f"選択中: 『{st.session_state.selected}』")
+        if st.button("✅ 回答する", key="submit_answer"):
+            st.session_state.answered = True
+            st.session_state.total += 1
+            if st.session_state.selected == quiz["answer"]:
+                st.session_state.correct += 1
+            st.rerun()
 
 # 回答後の処理
 else:
