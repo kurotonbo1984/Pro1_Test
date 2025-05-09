@@ -35,12 +35,12 @@ choices = quiz["choices"].split(",")
 random.shuffle(choices)
 
 if not st.session_state.answered:
-    # 地図画像の表示
+    # 地図画像の表示（現在のファイルと同じディレクトリから読み込む）
     col1, col2 = st.columns([1, 1], gap="large")
     with col1:
-        st.image(os.path.join("images", quiz["image_full"]), caption="全体地図", width=450)
+        st.image(os.path.join(os.path.dirname(__file__), quiz["image_full"]), caption="全体地図", width=450)
     with col2:
-        st.image(os.path.join("images", quiz["image_zoom"]), caption="拡大図", width=300)
+        st.image(os.path.join(os.path.dirname(__file__), quiz["image_zoom"]), caption="拡大図", width=300)
 
     st.markdown("### 選択肢")
     selected = st.radio("選んでください:", choices, index=None, key=f"selection_{st.session_state.quiz_index}")
