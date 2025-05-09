@@ -31,11 +31,6 @@ if "correct" not in st.session_state:
 
 quiz = df.iloc[st.session_state.quiz_index]
 
-# ボタン押下記録用キー
-button_key = f"answered_choice_{st.session_state.quiz_index}"
-if button_key not in st.session_state:
-    st.session_state[button_key] = False
-
 # 問題表示
 st.subheader(quiz["question"])
 
@@ -43,7 +38,7 @@ st.subheader(quiz["question"])
 choices = quiz["choices"].split(",")
 random.shuffle(choices)
 
-# 画像と選択肢表示 or フィードバックのみ表示
+# 回答前の処理
 if not st.session_state.answered:
     # 地図画像の表示（現在のファイルと同じディレクトリから読み込む）
     col1, col2 = st.columns([1, 1], gap="large")
@@ -55,14 +50,16 @@ if not st.session_state.answered:
     st.markdown("### 選択肢")
     cols = st.columns(2)
     for i, choice in enumerate(choices):
-        if not st.session_state[button_key] and cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
-            st.session_state.selected = choice
-            st.session_state.answered = True
-            st.session_state.total += 1
-            if choice == quiz["answer"]:
-                st.session_state.correct += 1
-            st.session_state[button_key] = True
-            st.rerun()
+        if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
+            if not st.session_state.answered:
+                st.session_state.selected = choice
+                st.session_state.answered = True
+                st.session_state.total += 1
+                if choice == quiz["answer"]:
+                    st.session_state.correct += 1
+                st.rerun()
+
+# 回答後の処理
 else:
     selected = st.session_state.selected
     correct = selected == quiz["answer"]
@@ -86,6 +83,5 @@ else:
         st.session_state.quiz_index = random.randint(0, len(df) - 1)
         st.session_state.answered = False
         st.session_state.selected = None
-        st.session_state[button_key] = False
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
