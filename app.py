@@ -34,9 +34,12 @@ quiz = df.iloc[st.session_state.quiz_index]
 # 問題表示
 st.subheader(quiz["question"])
 
-# 選択肢をランダムに
-choices = quiz["choices"].split(",")
-random.shuffle(choices)
+# 選択肢をランダムに（ただし quiz_index ごとに一貫性を持たせる）
+if "shuffled_choices" not in st.session_state or st.session_state.get("last_quiz_index") != st.session_state.quiz_index:
+    st.session_state.shuffled_choices = quiz["choices"].split(",")
+    random.shuffle(st.session_state.shuffled_choices)
+    st.session_state.last_quiz_index = st.session_state.quiz_index
+choices = st.session_state.shuffled_choices
 
 # 回答前の処理
 if not st.session_state.answered:
@@ -50,8 +53,9 @@ if not st.session_state.answered:
     st.markdown("### 選択肢")
     cols = st.columns(2)
     for i, choice in enumerate(choices):
-        if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
+        if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}_{st.session_state.total}"):
             st.session_state.selected = choice
+            st.experimental_rerun()
 
     if st.session_state.selected:
         st.markdown(f"選択中: 『{st.session_state.selected}』")
