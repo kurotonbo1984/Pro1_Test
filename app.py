@@ -24,6 +24,10 @@ if "selected" not in st.session_state:
     st.session_state.selected = None
 if "quiz_index" not in st.session_state:
     st.session_state.quiz_index = random.randint(0, len(df) - 1)
+if "total" not in st.session_state:
+    st.session_state.total = 0
+if "correct" not in st.session_state:
+    st.session_state.correct = 0
 
 quiz = df.iloc[st.session_state.quiz_index]
 
@@ -47,6 +51,9 @@ if not st.session_state.answered:
     if selected:
         st.session_state.selected = selected
         st.session_state.answered = True
+        st.session_state.total += 1
+        if selected == quiz["answer"]:
+            st.session_state.correct += 1
         st.rerun()
 else:
     selected = st.session_state.selected
@@ -61,6 +68,9 @@ else:
         st.markdown(f"<h1 style='text-align: center; color: red; font-size: 48px;'>❌ 不正解… 『{selected}』</h1>", unsafe_allow_html=True)
         st.markdown(f"<h2 style='text-align: center; color: green; font-size: 36px;'>正解は『{quiz['answer']}』です</h2>", unsafe_allow_html=True)
         st.snow()
+
+    # スコア表示
+    st.markdown(f"<p style='text-align: center; font-size: 20px;'>正解数: {st.session_state.correct} / {st.session_state.total}</p>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
