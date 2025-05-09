@@ -26,7 +26,7 @@ st.subheader(quiz["question"])
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image(quiz["image_full"], caption="全体地図", width=900)
+    st.image(quiz["image_full"], caption="全体地図", width=450)
 
 with col2:
     st.image(quiz["image_zoom"], caption="拡大図", width=300)
