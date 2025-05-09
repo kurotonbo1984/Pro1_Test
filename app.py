@@ -55,16 +55,17 @@ if not st.session_state.answered:
 
     if st.session_state.selected:
         st.markdown(f"選択中: 『{st.session_state.selected}』")
-        if st.button("✅ 回答する", key="submit_answer"):
-            st.session_state.answered = True
-            st.session_state.total += 1
-            if st.session_state.selected == quiz["answer"]:
-                st.session_state.correct += 1
-            st.rerun()
+
+    if st.button("✅ 回答する", key="submit_answer"):
+        st.session_state.answered = True
+        st.session_state.total += 1
+        if st.session_state.selected == quiz["answer"]:
+            st.session_state.correct += 1
+        st.rerun()
 
 # 回答後の処理
 else:
-    selected = st.session_state.selected
+    selected = st.session_state.selected if st.session_state.selected else "無回答"
     correct = selected == quiz["answer"]
 
     # 地図を非表示にしてフィードバックのみ表示
