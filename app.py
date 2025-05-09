@@ -57,12 +57,15 @@ else:
             st.success(f"✅ 正解です！『{selected}』")
             st.balloons()
         else:
-            st.error(f"❌ 不正解です… 正解は『{quiz['answer']}』")
+            st.error(f"❌ 不正解です… あなたの答え: 『{selected}』")
+            st.markdown(f"### ✅ 正解は『{quiz['answer']}』です！")
             st.snow()
 
     st.markdown("---")
-    if st.button("▶ 別の問題へ"):
+    st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+    if st.button("🟢 次の問題へ ▶", use_container_width=True):
         st.session_state.quiz = df.sample(1).iloc[0]
         st.session_state.answered = False
         st.session_state.selected = None
         st.experimental_rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
