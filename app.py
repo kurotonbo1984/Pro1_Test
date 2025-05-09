@@ -28,8 +28,6 @@ if "total" not in st.session_state:
     st.session_state.total = 0
 if "correct" not in st.session_state:
     st.session_state.correct = 0
-if "temp_selected" not in st.session_state:
-    st.session_state.temp_selected = None
 
 quiz = df.iloc[st.session_state.quiz_index]
 
@@ -50,14 +48,13 @@ if not st.session_state.answered:
         st.image(os.path.join(os.path.dirname(__file__), quiz["image_zoom"]), caption="拡大図", width=300)
 
     st.markdown("### 選択肢")
-    st.session_state.temp_selected = st.radio("選んでください:", choices, index=None, key=f"temp_radio_{st.session_state.quiz_index}")
-
-    if st.button("回答する", key=f"answer_button_{st.session_state.quiz_index}"):
-        if st.session_state.temp_selected:
-            st.session_state.selected = st.session_state.temp_selected
+    cols = st.columns(2)
+    for i, choice in enumerate(choices):
+        if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
+            st.session_state.selected = choice
             st.session_state.answered = True
             st.session_state.total += 1
-            if st.session_state.selected == quiz["answer"]:
+            if choice == quiz["answer"]:
                 st.session_state.correct += 1
             st.rerun()
 else:
@@ -83,6 +80,5 @@ else:
         st.session_state.quiz_index = random.randint(0, len(df) - 1)
         st.session_state.answered = False
         st.session_state.selected = None
-        st.session_state.temp_selected = None
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
