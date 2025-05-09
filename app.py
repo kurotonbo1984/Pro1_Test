@@ -22,10 +22,10 @@ if "answered" not in st.session_state:
     st.session_state.answered = False
 if "selected" not in st.session_state:
     st.session_state.selected = None
-if "quiz" not in st.session_state:
-    st.session_state.quiz = df.sample(1).iloc[0]
+if "quiz_index" not in st.session_state:
+    st.session_state.quiz_index = random.randint(0, len(df) - 1)
 
-quiz = st.session_state.quiz
+quiz = df.iloc[st.session_state.quiz_index]
 
 # 問題表示
 st.subheader(quiz["question"])
@@ -44,11 +44,11 @@ choices = quiz["choices"].split(",")
 random.shuffle(choices)
 
 if not st.session_state.answered:
-    selected = st.radio("選んでください:", choices, index=None, key="selection")
+    selected = st.radio("選んでください:", choices, index=None, key=f"selection_{st.session_state.quiz_index}")
     if selected:
         st.session_state.selected = selected
         st.session_state.answered = True
-        st.experimental_rerun()
+        st.rerun()
 else:
     selected = st.session_state.selected
     col_left, col_right = st.columns([1, 2])
@@ -63,9 +63,9 @@ else:
 
     st.markdown("---")
     st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-    if st.button("🟢 次の問題へ ▶", use_container_width=True):
-        st.session_state.quiz = df.sample(1).iloc[0]
+    if st.button("🟢 次の問題へ ▶", key="next_button", use_container_width=True):
+        st.session_state.quiz_index = random.randint(0, len(df) - 1)
         st.session_state.answered = False
         st.session_state.selected = None
-        st.experimental_rerun()
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
