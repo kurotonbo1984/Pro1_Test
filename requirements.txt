@@ -1,1 +1,3 @@
-ストリームリット
+streamlit
+pandas
+numpy
