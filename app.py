@@ -31,6 +31,11 @@ if "correct" not in st.session_state:
 
 quiz = df.iloc[st.session_state.quiz_index]
 
+# ボタン押下記録用キー
+button_key = f"answered_choice_{st.session_state.quiz_index}"
+if button_key not in st.session_state:
+    st.session_state[button_key] = False
+
 # 問題表示
 st.subheader(quiz["question"])
 
@@ -50,12 +55,13 @@ if not st.session_state.answered:
     st.markdown("### 選択肢")
     cols = st.columns(2)
     for i, choice in enumerate(choices):
-        if cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
+        if not st.session_state[button_key] and cols[i % 2].button(choice, key=f"choice_{i}_{st.session_state.quiz_index}"):
             st.session_state.selected = choice
             st.session_state.answered = True
             st.session_state.total += 1
             if choice == quiz["answer"]:
                 st.session_state.correct += 1
+            st.session_state[button_key] = True
             st.rerun()
 else:
     selected = st.session_state.selected
@@ -80,5 +86,6 @@ else:
         st.session_state.quiz_index = random.randint(0, len(df) - 1)
         st.session_state.answered = False
         st.session_state.selected = None
+        st.session_state[button_key] = False
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
