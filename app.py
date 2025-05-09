@@ -49,13 +49,14 @@ if not st.session_state.answered:
 
     st.markdown("### 選択肢")
     selected = st.radio("選んでください:", choices, index=None, key=f"selection_{st.session_state.quiz_index}")
-    if selected:
-        st.session_state.selected = selected
-        st.session_state.answered = True
-        st.session_state.total += 1
-        if selected == quiz["answer"]:
-            st.session_state.correct += 1
-        st.rerun()
+    if st.button("回答する", key=f"answer_button_{st.session_state.quiz_index}"):
+        if selected:
+            st.session_state.selected = selected
+            st.session_state.answered = True
+            st.session_state.total += 1
+            if selected == quiz["answer"]:
+                st.session_state.correct += 1
+            st.rerun()
 else:
     selected = st.session_state.selected
     correct = selected == quiz["answer"]
