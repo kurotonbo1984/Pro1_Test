@@ -39,9 +39,12 @@ selected = st.radio("選んでください:", choices, index=None)
 
 if selected:
     if selected == quiz["answer"]:
-        st.success(f"正解です！「{selected}」")
+        st.markdown(f"### ✅ 正解です！「{selected}」")
+        st.balloons()
     else:
-        st.error(f"不正解です！ 正解は「{quiz['answer']}」")
+        st.markdown(f"### ❌ 不正解です… 正解は「{quiz['answer']}」")
+        st.snow()
 
-    if st.button("別の問題へ"):
+    st.markdown("---")
+    if st.button("▶ 別の問題へ"):
         st.experimental_rerun()
