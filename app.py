@@ -3,14 +3,13 @@ import pandas as pd
 import random
 import os
 
-# CSVの読込み
+# CSVの読み込み
 QUIZ_CSV = "quiz.csv"
-IMAGE_DIR = "images"
 
 st.set_page_config(page_title="都道府県クイズ", layout="centered")
-st.title("\U0001f5fa️ にほんの都道府県クイズ")
+st.title("\U0001f5fa️ 日本の都道府県クイズ")
 
-# クイズデータの読込み
+# クイズデータの読み込み
 @st.cache_data
 def load_data():
     df = pd.read_csv(QUIZ_CSV)
@@ -27,23 +26,22 @@ st.subheader(quiz["question"])
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image(os.path.join(IMAGE_DIR, "full", quiz["image_full"]), caption="全体地図")
+    st.image(quiz["image_full"], caption="全体地図")
 
 with col2:
-    st.image(os.path.join(IMAGE_DIR, "zoom", quiz["image_zoom"]), caption="拡大圖")
+    st.image(quiz["image_zoom"], caption="拡大図")
 
 # 選択肢表示
 choices = quiz["choices"].split(",")
-random.shuffle(choices)  # 当試の一覧をもう一度シャッフル
+random.shuffle(choices)
 
 selected = st.radio("選んでください:", choices, index=None)
 
 if selected:
     if selected == quiz["answer"]:
-        st.success(f"正解です！ 「{selected}」")
+        st.success(f"正解です！「{selected}」")
     else:
-        st.error(f"不正解です！ 正解は 「{quiz['answer']}」")
-    
-    # 再試行ボタン
+        st.error(f"不正解です！ 正解は「{quiz['answer']}」")
+
     if st.button("別の問題へ"):
         st.experimental_rerun()
