@@ -26,12 +26,13 @@ st.subheader(quiz["question"])
 col1, col2 = st.columns(2)
 
 with col1:
-    st.image(quiz["image_full"], caption="全体地図")
+    st.image(quiz["image_full"], caption="全体地図", width=300)
 
 with col2:
-    st.image(quiz["image_zoom"], caption="拡大図")
+    st.image(quiz["image_zoom"], caption="拡大図", width=300)
 
-# 選択肢表示
+# 選択肢を拡大図の下に表示
+st.markdown("### 選択肢")
 choices = quiz["choices"].split(",")
 random.shuffle(choices)
 
